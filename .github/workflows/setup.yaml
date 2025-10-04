@@ -1,0 +1,22 @@
+name: Common Setup
+
+on:
+    workflow_call:
+        inputs:
+            aftman:
+                required: false
+                type: boolean
+                default: true
+
+jobs:
+    setup:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
+
+            - name: Install Aftman
+              if: ${{ inputs.aftman }}
+              uses: ok-nick/setup-aftman@v0.3.0
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
