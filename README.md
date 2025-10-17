@@ -1,4 +1,4 @@
-# Roblox Project
+# roblox-project
 
 A feature-rich project template aimed at elevating the game development process on the Roblox platform.
 
