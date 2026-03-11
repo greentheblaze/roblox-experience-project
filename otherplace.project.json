@@ -1,0 +1,56 @@
+{
+  "name": "roblox-experience-project-otherplace",
+  "tree": {
+    "$className": "DataModel",
+
+    "Workspace": {
+      "$className": "Workspace"
+    },
+
+    "ReplicatedFirst": {
+      "$path": "src/otherplace/ReplicatedFirst"
+    },
+
+    "ReplicatedStorage": {
+      "$path": "src/otherplace/ReplicatedStorage",
+      "Packages": {
+        "$path": "place-packages/otherplace/shared/Packages"
+      },
+      "InternalPackages": {
+        "$path": "place-packages/otherplace/shared/internal-packages"
+      }
+    },
+
+    "ServerScriptService": {
+      "$path": "src/otherplace/ServerScriptService"
+    },
+
+    "ServerStorage": {
+      "$path": "src/otherplace/ServerStorage",
+      "Packages": {
+        "$path": "place-packages/otherplace/server/Packages"
+      },
+      "InternalPackages": {
+        "$path": "place-packages/otherplace/server/internal-packages"
+      }
+    },
+
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$path": "src/otherplace/StarterPlayerScripts",
+        "Packages": {
+          "$ignoreUnknownInstances": true,
+          "$path": "place-packages/otherplace/client/Packages"
+        },
+        "InternalPackages": {
+          "$ignoreUnknownInstances": true,
+          "$path": "place-packages/otherplace/client/internal-packages"
+        }
+      },
+      "StarterCharacterScripts": {
+        "$path": "src/otherplace/StarterCharacterScripts"
+      }
+    }
+  }
+}

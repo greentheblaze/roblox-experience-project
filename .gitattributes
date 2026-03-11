@@ -1,5 +1,12 @@
 * text=auto eol=lf
 *.lua linguist-language=Lua
 *.luau linguist-language=Lua
-CustomPackages/* linguist-vendored
-Packages/* linguist-vendored
+
+place-packages/main/client/internal-packages/* linguist-vendored
+place-packages/main/client/Packages/* linguist-vendored
+
+place-packages/main/server/internal-packages/* linguist-vendored
+place-packages/main/server/Packages/* linguist-vendored
+
+place-packages/main/shared/internal-packages/* linguist-vendored
+place-packages/main/shared/Packages/* linguist-vendored
