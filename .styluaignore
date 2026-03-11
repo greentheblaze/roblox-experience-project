@@ -1,0 +1,13 @@
+place-packages/main/client/Packages
+place-packages/main/client/internal-packages
+place-packages/main/server/Packages
+place-packages/main/server/internal-packages
+place-packages/main/shared/Packages
+place-packages/main/shared/internal-packages
+
+place-packages/otherplace/client/Packages
+place-packages/otherplace/client/internal-packages
+place-packages/otherplace/server/Packages
+place-packages/otherplace/server/internal-packages
+place-packages/otherplace/shared/Packages
+place-packages/otherplace/shared/internal-packages
