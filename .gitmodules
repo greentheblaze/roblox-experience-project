@@ -1,0 +1,3 @@
+[submodule "Fusion"]
+	path = place-packages/main/client/internal-packages/Fusion
+	url = https://github.com/dphfox/Fusion
