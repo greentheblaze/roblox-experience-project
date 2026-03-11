@@ -8,48 +8,48 @@
     },
 
     "ReplicatedFirst": {
-      "$path": "src/main/ReplicatedFirst"
+      "$path": "src/otherplace/ReplicatedFirst"
     },
 
     "ReplicatedStorage": {
-      "$path": "src/main/ReplicatedStorage",
+      "$path": "src/otherplace/ReplicatedStorage",
       "Packages": {
-        "$path": "place-packages/main/shared/Packages"
+        "$path": "place-packages/otherplace/shared/Packages"
       },
       "InternalPackages": {
-        "$path": "place-packages/main/shared/internal-packages"
+        "$path": "place-packages/otherplace/shared/internal-packages"
       }
     },
 
     "ServerScriptService": {
-      "$path": "src/main/ServerScriptService"
+      "$path": "src/otherplace/ServerScriptService"
     },
 
     "ServerStorage": {
-      "$path": "src/main/ServerStorage",
+      "$path": "src/otherplace/ServerStorage",
       "Packages": {
-        "$path": "place-packages/main/server/Packages"
+        "$path": "place-packages/otherplace/server/Packages"
       },
       "InternalPackages": {
-        "$path": "place-packages/main/server/internal-packages"
+        "$path": "place-packages/otherplace/server/internal-packages"
       }
     },
 
     "StarterPlayer": {
       "$className": "StarterPlayer",
       "StarterPlayerScripts": {
-        "$path": "src/main/StarterPlayerScripts",
+        "$path": "src/otherplace/StarterPlayerScripts",
         "Packages": {
           "$ignoreUnknownInstances": true,
-          "$path": "place-packages/main/client/Packages"
+          "$path": "place-packages/otherplace/client/Packages"
         },
         "InternalPackages": {
           "$ignoreUnknownInstances": true,
-          "$path": "place-packages/main/client/internal-packages"
+          "$path": "place-packages/otherplace/client/internal-packages"
         }
       },
       "StarterCharacterScripts": {
-        "$path": "src/main/StarterCharacterScripts"
+        "$path": "src/otherplace/StarterCharacterScripts"
       }
     }
   }
