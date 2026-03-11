@@ -4,18 +4,18 @@
 # Packages
 /place-packages/main/client/Packages/*
 !/place-packages/main/client/Packages/init.meta.json
-/place-packages/main/client/core-packages/*
-!/place-packages/main/client/core-packages/init.meta.json
+/place-packages/main/client/internal-packages/*
+!/place-packages/main/client/internal-packages/init.meta.json
 
 /place-packages/main/server/Packages/*
 !/place-packages/main/server/Packages/init.meta.json
-/place-packages/main/server/core-packages/*
-!/place-packages/main/server/core-packages/init.meta.json
+/place-packages/main/server/internal-packages/*
+!/place-packages/main/server/internal-packages/init.meta.json
 
 /place-packages/main/shared/Packages/*
 !/place-packages/main/shared/Packages/init.meta.json
-/place-packages/main/shared/core-packages/*
-!/place-packages/main/shared/core-packages/init.meta.json
+/place-packages/main/shared/internal-packages/*
+!/place-packages/main/shared/internal-packages/init.meta.json
 
 /node_modules
 /jspm_packages
