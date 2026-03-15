@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A [markdownlint](https://github.com/DavidAnson/markdownlint) disable directive from LICENSE file due to no longer using the extension.
 - The `!.gitkeep` negation of the `/globalTypes.d.lua` ignore glob.
 - The wally.toml file from the main directory due to Wally only being used in place-packages.
+- Redundant `workflow_dispatch` and `schedule` configurations from ci.yaml.
 
 ### Fixed
 
