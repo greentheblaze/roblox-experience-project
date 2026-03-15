@@ -13,8 +13,6 @@ on:
       - develop
       - main
       - "release/*"
-  schedule:
-    - cron: "0 2 * * *" # nightly run
 
 jobs:
   lint:
