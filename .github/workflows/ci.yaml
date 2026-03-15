@@ -1,45 +1,43 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
     branches:
-      - "**"
+      - main
+      - develop
+      - "hotfix/*"
+      - "release/*"
+      - "feature/*"
   pull_request:
     branches:
-      - "**"
+      - develop
+      - main
+      - "release/*"
+  schedule:
+    - cron: "0 2 * * *" # nightly run
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yaml
-    with:
-      aftman: true
-
   lint:
+    name: Lint
     runs-on: ubuntu-latest
-    needs: setup
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Rust toolchain (for selene)
-        uses: actions-rs/toolchain@v1
+      - uses: ok-nick/setup-aftman@v0.3.0
+        name: Install aftman
         with:
-          toolchain: stable
-
-      - name: Install Selene
-        run: |
-          cargo install selene
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lint
-        run: selene ./src
+        run: |
+          selene ./src
 
   style:
+    name: Styling
     runs-on: ubuntu-latest
-    needs: setup
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: StyLua
         uses: JohnnyMorganz/stylua-action@v3
         with:
