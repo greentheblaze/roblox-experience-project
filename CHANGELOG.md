@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The original unthought-out package folder patterns in .gitattributes to the existing ones.
 - The title of README.md and links to the repository to use the new project name: "roblox-experience-project" (it was previously "roblox-project").
 - Various areas of this CHANGELOG to lower cognitive load when reading.
+- Code structure of deploy-place.yaml due to external refactoring.
 
 ### Removed
 
