@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `!.gitkeep` negation of the `/globalTypes.d.lua` ignore glob.
 - The wally.toml file from the main directory due to Wally only being used in place-packages.
 - Redundant `workflow_dispatch` and `schedule` configurations from ci.yaml.
+- Unused workflow_dispatch input logic.
 
 ### Fixed
 

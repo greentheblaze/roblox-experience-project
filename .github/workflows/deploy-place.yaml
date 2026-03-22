@@ -12,26 +12,17 @@ on:
           - development
           - qa
 
-      qaAction:
-        description: "QA environment action"
-        required: false
-        type: choice
-        options:
-          - create new place
-          - publish to existing place
-
       placeId:
-        description: "Place ID (required if overriding/removing in QA)"
+        description: "Place ID"
+        required: false
+
+      deployRef:
+        description: "Git ref to deploy (defaults to the ref that triggered this workflow)"
         required: false
 
       projectFileName:
         description: "Project file name"
         required: false
-
-      version:
-        description: "Branch/tag/ref to deploy"
-        type: environment
-        required: true
 
 jobs:
   deploy:
@@ -41,17 +32,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.version }}
+          ref: ${{ github.event.inputs.deployRef }}
 
       - uses: ok-nick/setup-aftman@v0.3.0
         name: Install aftman
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
+      # TODO: Implement the environment usage
       - name: List mapped directories
         run: |
           ls -la Packages
-          ls -la environment-configs/client/Packages
+          ls -la place-packages/main/client/Packages
           ls -la environment-configs/server/Packages
           find Packages -maxdepth 3 -type f | sed -n '1,200p'
 
@@ -93,28 +84,12 @@ jobs:
             -t published \
             -a ${{ secrets.API_KEY }}
 
-      - name: (QA) Create new place
-        if: ${{ github.event.inputs.environment == 'qa' && github.event.inputs.qaAction == 'create new place' }}
-        run: |
-          rbxcloud place create \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -f game.rbxl \
-            -a ${{ secrets.API_KEY }}
-
       - name: (QA) Override existing place
-        if: ${{ github.event.inputs.environment == 'qa' && github.event.inputs.qaAction == 'override existing place' }}
+        if: ${{ github.event.inputs.environment == 'qa' }}
         run: |
           rbxcloud experience publish \
             -f game.rbxl \
             -i ${{ github.event.inputs.placeId }} \
             -u ${{ vars.UNIVERSE_ID }} \
             -t published \
-            -a ${{ secrets.API_KEY }}
-
-      - name: (QA) Delete place
-        if: ${{ github.event.inputs.environment == 'qa' && github.event.inputs.qaAction == 'remove place' }}
-        run: |
-          rbxcloud place delete \
-            -i ${{ github.event.inputs.placeId }} \
-            -u ${{ vars.UNIVERSE_ID }} \
             -a ${{ secrets.API_KEY }}
