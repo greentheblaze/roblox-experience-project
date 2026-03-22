@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Rojo default.project.json and otherplace.project.json files for use in deployment and [Roblox UI](https://github.com/filiptibell/roblox-ui).
 - Roblox service directories inside src, and meta files to force Git to always see them.
 - Support for Git submodules (through .gitmodules).
+- place-map.json file for defining sub-folder alias names that relate to existing Rojo project files.
 
 ### Changed
 
