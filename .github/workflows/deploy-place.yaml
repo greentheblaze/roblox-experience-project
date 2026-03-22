@@ -6,15 +6,11 @@ on:
       environment:
         description: "Deployment environment"
         required: true
-        type: choice
-        options:
-          - production
-          - development
-          - qa
+        type: environment
 
       placeId:
         description: "Place ID"
-        required: false
+        required: true
 
       deployRef:
         description: "Git ref to deploy (defaults to the ref that triggered this workflow)"

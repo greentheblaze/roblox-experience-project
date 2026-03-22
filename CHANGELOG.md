@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The title of README.md and links to the repository to use the new project name: "roblox-experience-project" (it was previously "roblox-project").
 - Various areas of this CHANGELOG to lower cognitive load when reading.
 - Code structure of deploy-place.yaml due to external refactoring.
+- `environment` input type for deploy-place.yaml to its native one over `choice`; made `placeId` input required.
 
 ### Removed
 
