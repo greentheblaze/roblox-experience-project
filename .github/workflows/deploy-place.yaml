@@ -71,9 +71,6 @@ jobs:
           mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/shared/internal-packages
           mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/shared/Packages
 
-      - name: Install Wally (root)
-        run: wally install
-
       - name: Install Wally (client-only env)
         run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/client && wally install
 
