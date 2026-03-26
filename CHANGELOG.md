@@ -48,5 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A violation of Keep a Changelog where adding a line to an existing file was documented. (A change that small shouldn't have been documented at all. It was also incorrectly documented as an addition, rather than a change to an existing file.)
 - The unimplemented functionality for the `deployRef` input of deploy-place.yaml to use, by default, the commit SHA that triggered the workflow.
 - `workflow_dispatch` event of deploy-place.yaml by removing the old & redundant "Install Wally (root)" step.
+- "Ensure Packages folders exist" step of deploy-place.yaml by adding it after the "Install Wally" steps, adding Rojo Meta files to the created folders so that Rojo can successfully create builds.
 
 [unreleased]: https://github.com/greentheblaze/roblox-experience-project/compare/9f2094d54cc151be75cf693fbf875bd6ab9ecf02...HEAD
