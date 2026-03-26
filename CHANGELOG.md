@@ -53,5 +53,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Ensure Packages folders exist" step of deploy-place.yaml by adding it after the "Install Wally" steps, adding Rojo Meta files to the created folders so that Rojo can successfully create builds.
 - deploy-place.yaml file so that heredoc unsafe syntax is no longer used.
 - Broken Fusion Git submodule.
+- Submodules not generating correctly on GitHub by recursively checking out Git submodules.
 
 [unreleased]: https://github.com/greentheblaze/roblox-experience-project/compare/9f2094d54cc151be75cf693fbf875bd6ab9ecf02...HEAD
