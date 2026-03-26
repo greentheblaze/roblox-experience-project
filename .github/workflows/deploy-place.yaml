@@ -28,7 +28,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.deployRef }}
+          ref: ${{ github.event.inputs.deployRef || github.sha }}
 
       - uses: ok-nick/setup-aftman@v0.3.0
         name: Install aftman
