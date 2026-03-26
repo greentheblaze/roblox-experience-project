@@ -49,5 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The unimplemented functionality for the `deployRef` input of deploy-place.yaml to use, by default, the commit SHA that triggered the workflow.
 - `workflow_dispatch` event of deploy-place.yaml by removing the old & redundant "Install Wally (root)" step.
 - "Ensure Packages folders exist" step of deploy-place.yaml by adding it after the "Install Wally" steps, adding Rojo Meta files to the created folders so that Rojo can successfully create builds.
+- deploy-place.yaml file so that heredoc unsafe syntax is no longer used.
 
 [unreleased]: https://github.com/greentheblaze/roblox-experience-project/compare/9f2094d54cc151be75cf693fbf875bd6ab9ecf02...HEAD

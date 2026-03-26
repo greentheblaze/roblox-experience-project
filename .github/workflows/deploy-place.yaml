@@ -71,7 +71,7 @@ jobs:
       - name: Install Wally (shared env)
         run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/shared && wally install
 
-      - name: Ensure Packages folders exist
+      - name: Ensure Packages folders + init.meta.json exist
         run: |
           BASE="place-packages/${{ steps.alias.outputs.ALIAS }}"
 
@@ -83,13 +83,7 @@ jobs:
             if [ -z "$(ls -A "$PKG_DIR")" ]; then
               echo "Packages empty for $scope, creating init.meta.json"
 
-              cat <<EOF > "$PKG_DIR/init.meta.json"
-              {
-                "ignoreUnknownInstances": true,
-                "className": "Folder",
-                "properties": {}
-              }
-              EOF
+              echo '{"ignoreUnknownInstances": true, "className": "Folder", "properties": {}}' > "$PKG_DIR/init.meta.json"
             fi
           done
 
