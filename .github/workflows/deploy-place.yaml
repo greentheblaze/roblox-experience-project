@@ -34,41 +34,67 @@ jobs:
         name: Install aftman
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      # TODO: Implement the environment usage
+
+      - name: Load place map
+        id: placemap
+        run: |
+          echo "MAP=$(cat place-map.json | jq -c .)" >> $GITHUB_OUTPUT
+
+      - name: Resolve folder alias
+        id: alias
+        run: |
+          map='${{ steps.placemap.outputs.MAP }}'
+          projectFile="${{ github.event.inputs.projectFileName }}"
+          alias=$(echo "$map" | jq -r --arg p "$projectFile" '.[$p]')
+          if [ "$alias" = "null" ]; then
+            echo "Project file not found in place-map.json"
+            exit 1
+          fi
+          echo "ALIAS=$alias" >> $GITHUB_OUTPUT
+
       - name: List mapped directories
         run: |
-          ls -la Packages
-          ls -la place-packages/main/client/Packages
-          ls -la environment-configs/server/Packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/client/internal-packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/client/Packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/server/internal-packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/server/Packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/shared/internal-packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/shared/Packages
           find Packages -maxdepth 3 -type f | sed -n '1,200p'
 
       - name: Ensure Packages folders exist
         run: |
-          mkdir -p Packages
-          mkdir -p environment-configs/client/Packages
-          mkdir -p environment-configs/server/Packages
+          mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/client/internal-packages
+          mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/client/Packages
+          mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/server/internal-packages
+          mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/server/Packages
+          mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/shared/internal-packages
+          mkdir -p place-packages/${{ steps.alias.outputs.ALIAS }}/shared/Packages
 
       - name: Install Wally (root)
         run: wally install
 
       - name: Install Wally (client-only env)
-        run: cd environment-configs/client && wally install
+        run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/client && wally install
 
       - name: Install Wally (server-only env)
-        run: cd environment-configs/server && wally install
+        run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/server && wally install
+
+      - name: Install Wally (shared env)
+        run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/shared && wally install
 
       - name: Build place with Rojo
-        run: rojo build default.project.json -o game.rbxl
+        run: rojo build ${{ inputs.projectFileName }} -o BuildArtifact.rbxl
 
       - name: Deploy to production
         if: ${{ github.event.inputs.environment == 'production' }}
         run: |
           rbxcloud experience publish \
-            -f game.rbxl \
-            -i ${{ vars.PLACE_ID }} \
+            -f BuildArtifact.rbxl \
+            -i ${{ github.event.inputs.placeId }} \
             -u ${{ vars.UNIVERSE_ID }} \
             -t published \
-            -a ${{ secrets.API_KEY }}
+            -a ${{ secrets.PUBLISH_API_KEY }}
 
       - name: Deploy to development site
         if: ${{ github.event.inputs.environment == 'development' }}
