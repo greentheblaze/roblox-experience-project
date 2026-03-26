@@ -17,7 +17,7 @@
         "$path": "place-packages/otherplace/shared/Packages"
       },
       "InternalPackages": {
-        "$path": "place-packages/otherplace/shared/internal-packages"
+        "$className": "Folder"
       }
     },
 
@@ -31,7 +31,7 @@
         "$path": "place-packages/otherplace/server/Packages"
       },
       "InternalPackages": {
-        "$path": "place-packages/otherplace/server/internal-packages"
+        "$className": "Folder"
       }
     },
 
@@ -40,12 +40,10 @@
       "StarterPlayerScripts": {
         "$path": "src/otherplace/StarterPlayerScripts",
         "Packages": {
-          "$ignoreUnknownInstances": true,
           "$path": "place-packages/otherplace/client/Packages"
         },
         "InternalPackages": {
-          "$ignoreUnknownInstances": true,
-          "$path": "place-packages/otherplace/client/internal-packages"
+          "$className": "Folder"
         }
       },
       "StarterCharacterScripts": {

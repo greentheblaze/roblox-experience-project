@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code structure of deploy-place.yaml due to external refactoring.
 - `environment` input type for deploy-place.yaml to its native one over `choice`; made `placeId` input required.
 - Old "environment-configs" folder references to the new "place-packages" folder references in deploy-place.yaml.
+- Useless reference syntax for "internal-packages" folders to manually add each individual submodule.
+- Redundant init.meta.json to become .gitkeep files after removal of internal-packages folders direct references from Rojo project files.
 
 ### Removed
 
@@ -50,5 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `workflow_dispatch` event of deploy-place.yaml by removing the old & redundant "Install Wally (root)" step.
 - "Ensure Packages folders exist" step of deploy-place.yaml by adding it after the "Install Wally" steps, adding Rojo Meta files to the created folders so that Rojo can successfully create builds.
 - deploy-place.yaml file so that heredoc unsafe syntax is no longer used.
+- Broken Fusion Git submodule.
 
 [unreleased]: https://github.com/greentheblaze/roblox-experience-project/compare/9f2094d54cc151be75cf693fbf875bd6ab9ecf02...HEAD
