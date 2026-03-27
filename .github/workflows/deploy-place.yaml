@@ -54,10 +54,10 @@ jobs:
 
           echo "Response: $OUTPUT"
 
-          ACTUAL_UNIVERSE_ID=$(echo "$OUTPUT" | jq -r '.universeId')
+          REGISTERED_UNIVERSE_ID=$(echo "$OUTPUT" | jq -r '.universeId')
 
-          if [ "$ACTUAL_UNIVERSE_ID" != "${{ vars.UNIVERSE_ID }}" ]; then
-            echo "Invalid placeId provided. Please input a valid placeId that's registered under the UNIVERSE_ID variable for this environment"
+          if [ "$REGISTERED_UNIVERSE_ID" != "${{ vars.UNIVERSE_ID }}" ]; then
+            echo "Invalid placeId provided. Please input a valid placeId that's registered under the UNIVERSE_ID variable for this environment. Registered universeId for provided placeId: $REGISTERED_UNIVERSE_ID"
             exit 1
           fi
 
