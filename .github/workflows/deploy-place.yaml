@@ -36,6 +36,33 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Validate place belongs to universe
+        run: |
+          set -e
+
+          OUTPUT=$(rbxcloud place get \
+            -p ${{ inputs.placeId }} \
+            -u ${{ vars.UNIVERSE_ID }} \
+            -a ${{ secrets.PUBLISH_API_KEY }} \
+            2>error.log) || EXIT_CODE=$?
+
+          if [ ! -z "$EXIT_CODE" ]; then
+            echo "rbxcloud command failed"
+            cat error.log
+            exit 1
+          fi
+
+          echo "Response: $OUTPUT"
+
+          ACTUAL_UNIVERSE_ID=$(echo "$OUTPUT" | jq -r '.universeId')
+
+          if [ "$ACTUAL_UNIVERSE_ID" != "${{ vars.UNIVERSE_ID }}" ]; then
+            echo "Invalid placeId provided. Please input a valid placeId that's registered under the UNIVERSE_ID variable for this environment"
+            exit 1
+          fi
+
+          echo "Place is valid"
+
       - name: Load place map
         id: placemap
         run: |

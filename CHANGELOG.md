@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - place-map.json file for defining sub-folder alias names that relate to existing Rojo project files.
 - Functionality to load project folder aliases through the projectFileName input of the `workflow_dispatch` event of deploy-place.yaml, using place-map.json.
 - "shared env" Wally installation step to deploy-place.yaml.
+- Add "Validate place belongs to universe" step to deploy-place.yaml so that actions are restricted to being published only to places defined under a Roblox experience (universe).
 
 ### Changed
 
