@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Old "environment-configs" folder references to the new "place-packages" folder references in deploy-place.yaml.
 - Useless reference syntax for "internal-packages" folders to manually add each individual submodule.
 - Redundant init.meta.json to become .gitkeep files after removal of internal-packages folders direct references from Rojo project files.
+- Descendant "internal-packages" folders inside place-packages, and all their references, combining them all to create a central "internal-packages" folder in the working directory, so you can create single references to packages, that before would have been required to install in multiple areas.
 
 ### Removed
 

@@ -41,7 +41,7 @@
         "InternalPackages": {
           "$className": "Folder",
           "Fusion": {
-            "$path": "place-packages/main/client/internal-packages/Fusion/src"
+            "$path": "internal-packages/Fusion/src"
           }
         }
       },

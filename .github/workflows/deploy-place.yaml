@@ -55,13 +55,11 @@ jobs:
 
       - name: List mapped directories
         run: |
-          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/client/internal-packages
-          ls -la place-packages/main/client/internal-packages/Fusion/src
+          ls -la internal-packages
+          ls -la internal-packages/Fusion/src
 
           ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/client/Packages
-          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/server/internal-packages
           ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/server/Packages
-          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/shared/internal-packages
           ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/shared/Packages
           find Packages -maxdepth 3 -type f | sed -n '1,200p'
 
