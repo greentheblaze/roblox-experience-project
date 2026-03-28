@@ -12,8 +12,8 @@ on:
         description: "Place ID"
         required: true
 
-      deployRef:
-        description: "Git ref to deploy (defaults to the ref that triggered this workflow)"
+      buildRef:
+        description: "Git ref to build (defaults to the ref that triggered this workflow)"
         required: false
 
       projectFileName:
@@ -28,7 +28,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.deployRef || github.sha }}
+          ref: ${{ github.event.inputs.buildRef || github.sha }}
           submodules: recursive
 
       - uses: ok-nick/setup-aftman@v0.3.0

@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Output to "Validate place belongs to universe" step of deploy-place.yaml, so that the Universe ID can be easily debugged.
 - "Validate place belongs to universe" step of deploy-place.yaml to remove unnecessary check logic, leaving only the one rbxcloud command to run; if that fails, then the workflow terminates.
 - deploy-place.yaml to incorporate modular deployment based on GitHub environment variables rather than manual code logic.
+- Name of input in deploy-place.yaml from `deployRef` to `buildRef` for clarity.
 
 ### Removed
 
