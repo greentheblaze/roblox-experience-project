@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redundant init.meta.json to become .gitkeep files after removal of internal-packages folders direct references from Rojo project files.
 - Descendant "internal-packages" folders inside place-packages, and all their references, combining them all to create a central "internal-packages" folder in the working directory, so you can create single references to packages, that before would have been required to install in multiple areas.
 - Output to "Validate place belongs to universe" step of deploy-place.yaml, so that the Universe ID can be easily debugged.
+- "Validate place belongs to universe" step of deploy-place.yaml to remove unnecessary check logic, leaving only the one rbxcloud command to run; if that fails, then the workflow terminates.
 
 ### Removed
 

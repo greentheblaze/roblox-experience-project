@@ -40,28 +40,10 @@ jobs:
         run: |
           set -e
 
-          OUTPUT=$(rbxcloud place get \
-            -p ${{ inputs.placeId }} \
+          rbxcloud place get \
+            -p ${{ github.event.inputs.placeId }} \
             -u ${{ vars.UNIVERSE_ID }} \
-            -a ${{ secrets.PUBLISH_API_KEY }} \
-            2>error.log) || EXIT_CODE=$?
-
-          if [ ! -z "$EXIT_CODE" ]; then
-            echo "rbxcloud command failed"
-            cat error.log
-            exit 1
-          fi
-
-          echo "Response: $OUTPUT"
-
-          REGISTERED_UNIVERSE_ID=$(echo "$OUTPUT" | jq -r '.universeId')
-
-          if [ "$REGISTERED_UNIVERSE_ID" != "${{ vars.UNIVERSE_ID }}" ]; then
-            echo "Invalid placeId provided. Please input a valid placeId that's registered under the UNIVERSE_ID variable for this environment. Registered universeId for provided placeId: $REGISTERED_UNIVERSE_ID"
-            exit 1
-          fi
-
-          echo "Place is valid"
+            -a ${{ secrets.PUBLISH_API_KEY }} > /dev/null
 
       - name: Load place map
         id: placemap
