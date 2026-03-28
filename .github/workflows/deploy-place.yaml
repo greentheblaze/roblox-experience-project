@@ -36,6 +36,17 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check environment is configured to deploy to Roblox
+        run: |
+          set -e
+
+          if ! ${{ fromJSON(vars.DEPLOY_TO_ROBLOX || 'false') }}; then
+            echo "Environment has not been configured to deploy to Roblox"
+            exit 1
+          fi
+
+          echo "Proceeding with attempt to deploy to Roblox"
+
       - name: Validate place belongs to universe
         run: |
           set -e
@@ -100,8 +111,7 @@ jobs:
       - name: Build place with Rojo
         run: rojo build ${{ inputs.projectFileName }} -o BuildArtifact.rbxl
 
-      - name: Deploy to production
-        if: ${{ github.event.inputs.environment == 'production' }}
+      - name: Deploy to selected environment experience
         run: |
           rbxcloud experience publish \
             -f BuildArtifact.rbxl \
@@ -109,23 +119,3 @@ jobs:
             -u ${{ vars.UNIVERSE_ID }} \
             -t published \
             -a ${{ secrets.PUBLISH_API_KEY }}
-
-      - name: Deploy to development site
-        if: ${{ github.event.inputs.environment == 'development' }}
-        run: |
-          rbxcloud experience publish \
-            -f game.rbxl \
-            -i ${{ vars.PLACE_ID }} \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -t published \
-            -a ${{ secrets.API_KEY }}
-
-      - name: (QA) Override existing place
-        if: ${{ github.event.inputs.environment == 'qa' }}
-        run: |
-          rbxcloud experience publish \
-            -f game.rbxl \
-            -i ${{ github.event.inputs.placeId }} \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -t published \
-            -a ${{ secrets.API_KEY }}
