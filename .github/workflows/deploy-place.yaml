@@ -20,6 +20,12 @@ on:
         description: "Project file name"
         required: false
 
+      deployToRoblox:
+        description: "Deploy to Roblox (otherwise just build)"
+        required: false
+        default: false
+        type: boolean
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -48,6 +54,7 @@ jobs:
           echo "Proceeding with attempt to deploy to Roblox"
 
       - name: Validate place belongs to universe
+        if: ${{ inputs.deployToRoblox }}
         run: |
           set -e
 
@@ -111,7 +118,15 @@ jobs:
       - name: Build place with Rojo
         run: rojo build ${{ inputs.projectFileName }} -o BuildArtifact.rbxl
 
+      - name: Upload build-only artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !inputs.deployToRoblox }}
+        with:
+          name: roblox-build
+          path: BuildArtifact.rbxl
+
       - name: Deploy to selected environment experience
+        if: ${{ inputs.deployToRoblox }}
         run: |
           rbxcloud experience publish \
             -f BuildArtifact.rbxl \
