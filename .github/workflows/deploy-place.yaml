@@ -6,32 +6,25 @@ on:
       environment:
         description: "Deployment environment"
         required: true
-        type: choice
-        options:
-          - production
-          - development
-          - qa
-
-      qaAction:
-        description: "QA environment action"
-        required: false
-        type: choice
-        options:
-          - create new place
-          - publish to existing place
+        type: environment
 
       placeId:
-        description: "Place ID (required if overriding/removing in QA)"
+        description: "Place ID"
+        required: true
+
+      buildRef:
+        description: "Git ref to build (defaults to the ref that triggered this workflow)"
         required: false
 
       projectFileName:
         description: "Project file name"
         required: false
 
-      version:
-        description: "Branch/tag/ref to deploy"
-        type: environment
-        required: true
+      deployToRoblox:
+        description: "Deploy to Roblox (otherwise just build)"
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   deploy:
@@ -41,80 +34,103 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.version }}
+          ref: ${{ github.event.inputs.buildRef || github.sha }}
+          submodules: recursive
 
       - uses: ok-nick/setup-aftman@v0.3.0
         name: Install aftman
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check environment is configured to deploy to Roblox
+        run: |
+          set -e
+
+          if ! ${{ fromJSON(vars.DEPLOY_TO_ROBLOX || 'false') }}; then
+            echo "Environment has not been configured to deploy to Roblox"
+            exit 1
+          fi
+
+          echo "Proceeding with attempt to deploy to Roblox"
+
+      - name: Validate place belongs to universe
+        if: ${{ inputs.deployToRoblox }}
+        run: |
+          set -e
+
+          rbxcloud place get \
+            -p ${{ github.event.inputs.placeId }} \
+            -u ${{ vars.UNIVERSE_ID }} \
+            -a ${{ secrets.PUBLISH_API_KEY }} > /dev/null
+
+      - name: Load place map
+        id: placemap
+        run: |
+          echo "MAP=$(cat place-map.json | jq -c .)" >> $GITHUB_OUTPUT
+
+      - name: Resolve folder alias
+        id: alias
+        run: |
+          map='${{ steps.placemap.outputs.MAP }}'
+          projectFile="${{ github.event.inputs.projectFileName }}"
+          alias=$(echo "$map" | jq -r --arg p "$projectFile" '.[$p]')
+          if [ "$alias" = "null" ]; then
+            echo "Project file not found in place-map.json"
+            exit 1
+          fi
+          echo "ALIAS=$alias" >> $GITHUB_OUTPUT
+
       - name: List mapped directories
         run: |
-          ls -la Packages
-          ls -la environment-configs/client/Packages
-          ls -la environment-configs/server/Packages
+          ls -la internal-packages
+          ls -la internal-packages/Fusion/src
+
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/client/Packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/server/Packages
+          ls -la place-packages/${{ steps.alias.outputs.ALIAS }}/shared/Packages
           find Packages -maxdepth 3 -type f | sed -n '1,200p'
 
-      - name: Ensure Packages folders exist
-        run: |
-          mkdir -p Packages
-          mkdir -p environment-configs/client/Packages
-          mkdir -p environment-configs/server/Packages
-
-      - name: Install Wally (root)
-        run: wally install
-
       - name: Install Wally (client-only env)
-        run: cd environment-configs/client && wally install
+        run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/client && wally install
 
       - name: Install Wally (server-only env)
-        run: cd environment-configs/server && wally install
+        run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/server && wally install
+
+      - name: Install Wally (shared env)
+        run: cd place-packages/${{ steps.alias.outputs.ALIAS }}/shared && wally install
+
+      - name: Ensure Packages folders + init.meta.json exist
+        run: |
+          BASE="place-packages/${{ steps.alias.outputs.ALIAS }}"
+
+          for scope in client server shared; do
+            PKG_DIR="$BASE/$scope/Packages"
+
+            mkdir -p "$PKG_DIR"
+
+            if [ -z "$(ls -A "$PKG_DIR")" ]; then
+              echo "Packages empty for $scope, creating init.meta.json"
+
+              echo '{"ignoreUnknownInstances": true, "className": "Folder", "properties": {}}' > "$PKG_DIR/init.meta.json"
+            fi
+          done
 
       - name: Build place with Rojo
-        run: rojo build default.project.json -o game.rbxl
+        run: rojo build ${{ inputs.projectFileName }} -o BuildArtifact.rbxl
 
-      - name: Deploy to production
-        if: ${{ github.event.inputs.environment == 'production' }}
+      - name: Upload build-only artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !inputs.deployToRoblox }}
+        with:
+          name: roblox-build
+          path: BuildArtifact.rbxl
+
+      - name: Deploy to selected environment experience
+        if: ${{ inputs.deployToRoblox }}
         run: |
           rbxcloud experience publish \
-            -f game.rbxl \
-            -i ${{ vars.PLACE_ID }} \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -t published \
-            -a ${{ secrets.API_KEY }}
-
-      - name: Deploy to development site
-        if: ${{ github.event.inputs.environment == 'development' }}
-        run: |
-          rbxcloud experience publish \
-            -f game.rbxl \
-            -i ${{ vars.PLACE_ID }} \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -t published \
-            -a ${{ secrets.API_KEY }}
-
-      - name: (QA) Create new place
-        if: ${{ github.event.inputs.environment == 'qa' && github.event.inputs.qaAction == 'create new place' }}
-        run: |
-          rbxcloud place create \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -f game.rbxl \
-            -a ${{ secrets.API_KEY }}
-
-      - name: (QA) Override existing place
-        if: ${{ github.event.inputs.environment == 'qa' && github.event.inputs.qaAction == 'override existing place' }}
-        run: |
-          rbxcloud experience publish \
-            -f game.rbxl \
+            -f BuildArtifact.rbxl \
             -i ${{ github.event.inputs.placeId }} \
             -u ${{ vars.UNIVERSE_ID }} \
             -t published \
-            -a ${{ secrets.API_KEY }}
-
-      - name: (QA) Delete place
-        if: ${{ github.event.inputs.environment == 'qa' && github.event.inputs.qaAction == 'remove place' }}
-        run: |
-          rbxcloud place delete \
-            -i ${{ github.event.inputs.placeId }} \
-            -u ${{ vars.UNIVERSE_ID }} \
-            -a ${{ secrets.API_KEY }}
+            -a ${{ secrets.PUBLISH_API_KEY }}

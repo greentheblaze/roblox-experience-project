@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The Rojo default.project.json and otherplace.project.json files for use in deployment and [Roblox UI](https://github.com/filiptibell/roblox-ui).
 - Roblox service directories inside src, and meta files to force Git to always see them.
 - Support for Git submodules (through .gitmodules).
+- place-map.json file for defining sub-folder alias names that relate to existing Rojo project files.
+- Functionality to load project folder aliases through the projectFileName input of the `workflow_dispatch` event of deploy-place.yaml, using place-map.json.
+- "shared env" Wally installation step to deploy-place.yaml.
+- Add "Validate place belongs to universe" step to deploy-place.yaml so that actions are restricted to being published only to places defined under a Roblox experience (universe).
+- "Deploy to Roblox (otherwise just build)" input to deploy-place.yaml as an extra option in case builds aren't necessary to upload to Roblox (and they only need testing locally).
 
 ### Changed
 
@@ -27,6 +32,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The title of README.md and links to the repository to use the new project name: "roblox-experience-project" (it was previously "roblox-project").
 - Various areas of this CHANGELOG to lower cognitive load when reading.
 - Code structure of deploy-place.yaml due to external refactoring.
+- `environment` input type for deploy-place.yaml to its native one over `choice`; made `placeId` input required.
+- Old "environment-configs" folder references to the new "place-packages" folder references in deploy-place.yaml.
+- Useless reference syntax for "internal-packages" folders to manually add each individual submodule.
+- Redundant init.meta.json to become .gitkeep files after removal of internal-packages folders direct references from Rojo project files.
+- Descendant "internal-packages" folders inside place-packages, and all their references, combining them all to create a central "internal-packages" folder in the working directory, so you can create single references to packages, that before would have been required to install in multiple areas.
+- Output to "Validate place belongs to universe" step of deploy-place.yaml, so that the Universe ID can be easily debugged.
+- "Validate place belongs to universe" step of deploy-place.yaml to remove unnecessary check logic, leaving only the one rbxcloud command to run; if that fails, then the workflow terminates.
+- deploy-place.yaml to incorporate modular deployment based on GitHub environment variables rather than manual code logic.
+- Name of input in deploy-place.yaml from `deployRef` to `buildRef` for clarity.
 
 ### Removed
 
@@ -34,11 +48,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `!.gitkeep` negation of the `/globalTypes.d.lua` ignore glob.
 - The wally.toml file from the main directory due to Wally only being used in place-packages.
 - Redundant `workflow_dispatch` and `schedule` configurations from ci.yaml.
+- Unused workflow_dispatch input logic.
 
 ### Fixed
 
 - Build paths in otherplace.project.json so they aren't using the main place's directories.
 - .gitignore so git submodules now appear (involved removing all globs to internal-packages after realizing that only git submodules will exist there).
 - A violation of Keep a Changelog where adding a line to an existing file was documented. (A change that small shouldn't have been documented at all. It was also incorrectly documented as an addition, rather than a change to an existing file.)
+- The unimplemented functionality for the `deployRef` input of deploy-place.yaml to use, by default, the commit SHA that triggered the workflow.
+- `workflow_dispatch` event of deploy-place.yaml by removing the old & redundant "Install Wally (root)" step.
+- "Ensure Packages folders exist" step of deploy-place.yaml by adding it after the "Install Wally" steps, adding Rojo Meta files to the created folders so that Rojo can successfully create builds.
+- deploy-place.yaml file so that heredoc unsafe syntax is no longer used.
+- Broken Fusion Git submodule.
+- Submodules not generating correctly on GitHub by recursively checking out Git submodules.
 
 [unreleased]: https://github.com/greentheblaze/roblox-experience-project/compare/9f2094d54cc151be75cf693fbf875bd6ab9ecf02...HEAD
