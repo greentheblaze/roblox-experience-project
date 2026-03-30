@@ -7,5 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-03-30
+
+### Added
+
+- Multi-place Rojo project structure.
+- Basic build & deploy workflows.
+
 [unreleased]: https://github.com/greentheblaze/roblox-experience-project/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/greentheblaze/roblox-experience-project/releases/tag/v0.1.0
